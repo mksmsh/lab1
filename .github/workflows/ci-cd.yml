@@ -40,12 +40,7 @@ jobs:
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
-    - name: Link Railway Project
-      run: railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-
-    - name: Deploy Docker Image
-      run: railway up --detach --service lab1-app --image ${{ secrets.DOCKER_USERNAME }}/lab1-app:latest
+    - name: Deploy Docker Image to Railway
+      run: railway up --detach --project ${{ secrets.RAILWAY_PROJECT_ID }} --service lab1-app --image ${{ secrets.DOCKER_USERNAME }}/lab1-app:latest
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
