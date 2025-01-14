@@ -58,15 +58,10 @@ jobs:
     - name: Install Railway CLI
       run: curl -fsSL https://railway.app/install.sh | sh
 
-    # 8. Линкуем проект на Railway
-    - name: Link Railway Project
-      run: railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
     # 9. Деплой Docker-образа на Railway
     - name: Deploy to Railway
       run: |
-        railway up --detach --service lab1-app --ci
+        railway up --service lab1-app
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
