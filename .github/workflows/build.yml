@@ -59,6 +59,11 @@ jobs:
       run: curl -fsSL https://railway.app/install.sh | sh
 
 
+    - name: Authenticate with Railway
+      run: echo $RAILWAY_TOKEN | railway login --key
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
     - name: Link Railway Project
       run: railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
       env:
@@ -67,4 +72,4 @@ jobs:
     - name: Deploy to Railway
       run: railway up --service lab1-app
       env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }
