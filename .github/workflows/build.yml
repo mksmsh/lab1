@@ -31,6 +31,9 @@ jobs:
 
     - name: Run Django tests
       run: python manage.py test
+      env:
+        DJANGO_SETTINGS_MODULE: lab1.settings
+        DEBUG: 'True'
 
     # 4. Устанавливаем Docker Buildx для сборки Docker-образа
     - name: Set up Docker Buildx
