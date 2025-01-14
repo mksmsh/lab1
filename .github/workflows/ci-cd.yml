@@ -33,13 +33,10 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/lab1-app:latest
 
-    - name: Install Railway CLI
+    - name: Set up Railway CLI and authenticate
       run: |
         curl -fsSL https://railway.app/install.sh | sh
-        echo 'export PATH="$HOME/.railway/bin:$PATH"' >> $GITHUB_ENV
-
-    - name: Authorize Railway
-      run: railway login
+        export PATH="$HOME/.railway/bin:$PATH"
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
