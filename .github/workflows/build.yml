@@ -62,6 +62,6 @@ jobs:
     # 9. Деплой Docker-образа на Railway
     - name: Deploy to Railway
       run: |
-        railway up --service lab1-app
+        railway up --path ./ --service lab1-app
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
