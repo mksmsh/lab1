@@ -7,11 +7,17 @@ WORKDIR /app
 # Копируем файлы приложения
 COPY . /app/
 
-# Устанавливаем зависимости
+# Устанавливаем необходимые зависимости
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libpq-dev && \
+    apt-get clean
+
+# Устанавливаем Python-зависимости
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Указываем порт
 EXPOSE 8000
 
-# Используем gunicorn для запуска сервера
+# Команда для запуска приложения
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "lab1.wsgi:application"]
