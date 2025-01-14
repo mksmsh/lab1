@@ -33,14 +33,14 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/lab1-app:latest
 
-    - name: Install Railway CLI
-      run: |
-        curl -sSL https://railway.app/install.sh | sh
-        echo "export PATH=$HOME/.railway/bin:$PATH" >> $GITHUB_ENV
-
-    - name: Deploy to Railway
-      run: railway up --detach --service lab1-app
+    - name: Link Railway Project
+      run: railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+
+    - name: Deploy Docker Image
+      run: railway up --detach --service lab1-app --build-args "image=saa24um203/lab1-app:latest"
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
 
