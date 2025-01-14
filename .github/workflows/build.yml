@@ -61,16 +61,12 @@ jobs:
 
     # 8. Аутентификация в Railway
     - name: Authenticate with Railway
-      run: railway login --token ${{ secrets.RAILWAY_TOKEN }}
+      run: echo ${{ secrets.RAILWAY_TOKEN }} | railway login
 
     # 9. Линкуем проект
     - name: Link Railway Project
       run: railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
     # 10. Деплой Docker-образа
     - name: Deploy to Railway
       run: railway up --service lab1-app
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
