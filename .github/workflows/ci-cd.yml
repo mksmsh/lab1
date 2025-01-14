@@ -39,7 +39,8 @@ jobs:
         echo "export PATH=$HOME/.railway/bin:$PATH" >> $GITHUB_ENV
 
     - name: Deploy to Railway
-      run: railway up --detach
+      run: railway up --detach --service lab1-app
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+
