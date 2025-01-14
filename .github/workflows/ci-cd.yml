@@ -39,16 +39,6 @@ jobs:
         echo 'export PATH="$HOME/.railway/bin:$PATH"' >> $GITHUB_ENV
 
     - name: Authorize Railway
-      run: echo $RAILWAY_TOKEN | railway login --key
+      run: railway login
       env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
-    - name: Link Railway Project
-      run: railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-
-    - name: Deploy Docker Image
-      run: railway up --detach --service lab1-app --image ${{ secrets.DOCKER_USERNAME }}/lab1-app:latest
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
