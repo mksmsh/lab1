@@ -30,7 +30,7 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run Django tests
-      run: python manage.py test
+      run: python manage.py test persons
       env:
         DJANGO_SETTINGS_MODULE: lab1.settings
         DEBUG: 'True'
@@ -57,16 +57,18 @@ jobs:
 
     # 7. Устанавливаем Railway CLI (если не установлен)
     - name: Install Railway CLI
-      run: curl -fsSL https://railway.app/install.sh | sh
+      run: |
+        curl -fsSL https://railway.app/install.sh | sh
+        export PATH="$HOME/.railway/bin:$PATH"
 
-    # 8. Логинимся в Railway
-    - name: Log in to Railway
-      run: railway login --token ${{ secrets.RAILWAY_TOKEN }}
-
-    # 9. Линкуем проект на Railway
+    # 8. Линкуем проект на Railway
     - name: Link Railway Project
       run: railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
-    # 10. Деплой Docker-образа на Railway
+    # 9. Деплой Docker-образа на Railway
     - name: Deploy to Railway
       run: railway up --detach --service lab1-app --build-args "image=${{ secrets.DOCKER_USERNAME }}/lab1-app:latest"
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
