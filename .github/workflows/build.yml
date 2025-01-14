@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for Lab1
+name: CI/CD Pipeline
 
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: 3.11
+        python-version: '3.11'
 
     # 3. Устанавливаем зависимости и запускаем тесты
     - name: Install dependencies
@@ -30,11 +30,12 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run Django tests
-      run: python manage.py test persons
+      run: python manage.py test
       env:
         DJANGO_SETTINGS_MODULE: lab1.settings
+        DEBUG: 'True'
 
-    # 4. Устанавливаем Docker Buildx для сборки Docker-образа
+    # 4. Устанавливаем Docker Buildx
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
@@ -54,21 +55,21 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/lab1-app:latest
 
-    # 7. Устанавливаем Railway CLI (если не установлен)
+    # 7. Устанавливаем Railway CLI
     - name: Install Railway CLI
       run: curl -fsSL https://railway.app/install.sh | sh
 
-
+    # 8. Аутентификация в Railway
     - name: Authenticate with Railway
-      run: echo $RAILWAY_TOKEN | railway login --key
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      run: railway login --token ${{ secrets.RAILWAY_TOKEN }}
 
+    # 9. Линкуем проект
     - name: Link Railway Project
       run: railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
+    # 10. Деплой Docker-образа
     - name: Deploy to Railway
       run: railway up --service lab1-app
       env:
