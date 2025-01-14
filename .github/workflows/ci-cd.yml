@@ -1,0 +1,37 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run tests
+      run: python manage.py test
+
+    - name: Log in to Railway
+      run: railway login --token ${{ secrets.RAILWAY_TOKEN }}
+
+    - name: Deploy to Railway
+      run: |
+        railway up --project-id ${{ secrets.RAILWAY_PROJECT_ID }} --detach
