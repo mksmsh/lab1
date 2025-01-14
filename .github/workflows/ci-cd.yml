@@ -38,12 +38,11 @@ jobs:
         curl -sSL https://railway.app/install.sh | sh
         echo "export PATH=$HOME/.railway/bin:$PATH" >> $GITHUB_ENV
 
+    - name: Log in to Railway
+      run: echo ${{ secrets.RAILWAY_TOKEN }} | railway login --key
+
     - name: Link Railway Project
       run: railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
     - name: Deploy to Railway
       run: railway up --detach
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
