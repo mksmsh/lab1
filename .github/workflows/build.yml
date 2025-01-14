@@ -1,0 +1,69 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Клонируем репозиторий
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # 2. Устанавливаем Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    # 3. Устанавливаем зависимости и запускаем тесты
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run tests
+      run: pytest
+
+    # 4. Устанавливаем Docker Buildx для сборки Docker-образа
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    # 5. Логинимся в DockerHub
+    - name: Log in to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    # 6. Сборка и пуш Docker-образа
+    - name: Build and Push Docker Image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: Dockerfile
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/lab1-app:latest
+
+    # 7. Устанавливаем Railway CLI (если не установлен)
+    - name: Install Railway CLI
+      run: curl -fsSL https://railway.app/install.sh | sh
+
+    # 8. Логинимся в Railway
+    - name: Log in to Railway
+      run: railway login --token ${{ secrets.RAILWAY_TOKEN }}
+
+    # 9. Линкуем проект на Railway
+    - name: Link Railway Project
+      run: railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
+
+    # 10. Деплой Docker-образа на Railway
+    - name: Deploy to Railway
+      run: railway up --detach --service lab1-app --build-args "image=${{ secrets.DOCKER_USERNAME }}/lab1-app:latest"
