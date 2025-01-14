@@ -62,6 +62,7 @@ jobs:
     # 8. Деплой Docker-образа на Railway
     - name: Deploy to Railway
       run: |
-        railway up --detach --service lab1-app --build-args "image=${{ secrets.DOCKER_USERNAME }}/lab1-app:latest"
+        railway up --detach --service lab1-app --ci
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
