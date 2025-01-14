@@ -54,6 +54,11 @@ jobs:
         curl -fsSL https://railway.app/install.sh | sh
         export PATH="$HOME/.railway/bin:$PATH"
 
+    - name: Verify Railway Token
+      run: echo "Railway Token is set"
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
     - name: Link Railway Project
       run: railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
       env:
