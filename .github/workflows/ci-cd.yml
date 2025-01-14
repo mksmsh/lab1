@@ -43,7 +43,7 @@ jobs:
 
     - name: Deploy to Railway
       run: |
-        railway up --service docker --image ${{ secrets.DOCKER_USERNAME }}/lab1-app:latest
+        railway up -- --service docker --image ${{ secrets.DOCKER_USERNAME }}/lab1-app:latest
       env:
         RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
